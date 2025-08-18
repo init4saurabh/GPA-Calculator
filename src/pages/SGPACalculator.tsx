@@ -148,12 +148,12 @@ const SGPACalculator = () => {
                       type="number"
                       min="1"
                       max="13"
-                      placeholder="Enter between 1-13"
+                      placeholder=" 1-13"
                       value={numSubjects}
                       onChange={(e) => setNumSubjects(e.target.value)}
                       className="text-center text-xl py-6 bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl"
                     />
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm  text-red-500">
                       Enter a number between 1 and 13
                     </p>
                   </div>
@@ -219,7 +219,7 @@ const SGPACalculator = () => {
                     <Label className="text-foreground font-semibold">Credits</Label>
                     <Input
                       type="number"
-                      placeholder="e.g., 4"
+                      placeholder="e.g 4"
                       value={subject.credits}
                       onChange={(e) => updateSubject(subject.id, "credits", e.target.value)}
                       className="bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl text-center font-medium"
@@ -232,13 +232,13 @@ const SGPACalculator = () => {
                       type="number"
                       min="0"
                       max="100"
-                      placeholder="e.g., 85"
+                      placeholder="0-100"
                       value={subject.marks}
                       onChange={(e) => updateSubject(subject.id, "marks", e.target.value)}
                       className="bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl text-center font-medium"
                     />
                     <p className="text-xs text-muted-foreground">
-                      90-100: O (10pts) • 80-89: A+ (9pts) • 70-79: A (8pts) • 60-69: B+ (7pts) • 50-59: B (6pts) • 40-49: C (5pts) • Below 40: F (0pts)
+                      90-100: O(10pts) • 80-89: A+(9pts) • 70-79: A(8pts) • 60-69: B+(7pts) • 50-59: B(6pts) • 40-49: C(5pts) • Below 40: F(0pts)
                     </p>
                   </div>
                 </div>
@@ -264,7 +264,7 @@ const SGPACalculator = () => {
                     {sgpa}
                   </div>
                   <p className="text-muted-foreground font-medium">
-                    Great job this semester!
+                    {sgpa >= 9 ? "Party!" : sgpa >= 7 ? "Badhiya hai" : "Thoda pdho yrr !"}
                   </p>
                 </ModernCardContent>
               </ModernCard>

@@ -115,8 +115,8 @@ const CGPACalculator = () => {
                 <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary">
                   Calculate your CGPA
                 </h1>
-                <p className="text-xl text-foreground/70 font-medium">
-                  Enter your semester-wise SGPA values - no need to panic! 😊
+                <p className="text-xl text-foreground/70 font-medium ">
+                  Enter your semester-wise SGPA values -😊
                 </p>
               </div>
 
@@ -136,9 +136,9 @@ const CGPACalculator = () => {
                       onChange={(e) => setNumSemesters(e.target.value)}
                       className="text-center text-xl py-6 bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl"
                     />
-                    <p className="text-sm text-muted-foreground">
-                      Enter number of semesters between 1 and 8
-                    </p>
+                   <p className="text-sm text-red-500">
+                        Enter number of semesters between 1 and 8
+                  </p>
                   </div>
                   
                   <ModernButton onClick={handleContinue} size="lg" className="w-full">
@@ -205,7 +205,7 @@ const CGPACalculator = () => {
                       step="0.01"
                       min="0"
                       max="10"
-                      placeholder="e.g., 8.75"
+                      placeholder="0-10"
                       value={semester.sgpa}
                       onChange={(e) => updateSemester(semester.id, e.target.value)}
                       className="bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl text-center font-medium text-lg py-3"
@@ -233,9 +233,10 @@ const CGPACalculator = () => {
                   <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary mb-2">
                     {cgpa}
                   </div>
-                  <p className="text-muted-foreground font-medium">
-                    Excellent academic performance!
+                  <p>
+                    {cgpa >= 9 ? "Outstanding!" : cgpa >= 7 ? "Great job!" : "Keep improving!"}
                   </p>
+                 
                 </ModernCardContent>
               </ModernCard>
             )}

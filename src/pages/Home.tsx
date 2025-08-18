@@ -3,8 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { ModernButton } from "@/components/ui/modern-button";
 import { ModernCard, ModernCardContent } from "@/components/ui/modern-card";
 import { GraduationCap, Calculator, Zap, Sparkles, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button"; // shadcn button
-import { Github, Linkedin } from "lucide-react"; // icons
+import { Button } from "@/components/ui/button"; 
+import { Github, Linkedin } from "lucide-react"; 
 
 const Home = () => {
   const navigate = useNavigate();
@@ -113,6 +113,7 @@ const Home = () => {
             ))}
           </div>
         </div>
+        
       </main>
 
       {/* Footer line inside Home.tsx */}
