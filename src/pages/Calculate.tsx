@@ -1,202 +1,80 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calculator, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { HeroButton } from "@/components/HeroButton";
-import { Card } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { ModernButton } from "@/components/ui/modern-button";
+import { ModernCard, ModernCardContent } from "@/components/ui/modern-card";
 
-interface Semester {
-  id: number;
-  sgpa: string;
-}
-
-const CGPACalculator = () => {
+const Calculate = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [numSemesters, setNumSemesters] = useState("");
-  const [showForm, setShowForm] = useState(false);
-  const [semesters, setSemesters] = useState<Semester[]>([]);
-  const [cgpa, setCGPA] = useState<number | null>(null);
-
-  const handleContinue = () => {
-    const num = parseInt(numSemesters);
-    if (num < 1 || num > 8) {
-      toast({
-        title: "Invalid Input",
-        description: "Number of semesters must be between 1 and 8",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    const newSemesters = Array.from({ length: num }, (_, i) => ({
-      id: i + 1,
-      sgpa: ""
-    }));
-    setSemesters(newSemesters);
-    setShowForm(true);
-  };
-
-  const calculateCGPA = () => {
-    let totalSGPA = 0;
-    let validSemesters = 0;
-    
-    for (const semester of semesters) {
-      if (!semester.sgpa) {
-        toast({
-          title: "Incomplete Data",
-          description: "Please fill in all semester SGPAs",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      const sgpa = parseFloat(semester.sgpa);
-      if (sgpa < 0 || sgpa > 10) {
-        toast({
-          title: "Invalid SGPA",
-          description: `SGPA for Semester ${semester.id} must be between 0 and 10`,
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      totalSGPA += sgpa;
-      validSemesters++;
-    }
-    
-    const calculatedCGPA = totalSGPA / validSemesters;
-    setCGPA(Math.round(calculatedCGPA * 100) / 100);
-    
-    toast({
-      title: "CGPA Calculated!",
-      description: `Your CGPA is ${Math.round(calculatedCGPA * 100) / 100}`,
-    });
-  };
-
-  const updateSemester = (id: number, value: string) => {
-    setSemesters(prev => prev.map(semester => 
-      semester.id === id ? { ...semester, sgpa: value } : semester
-    ));
-  };
-
-  if (!showForm) {
-    return (
-      <div className="min-h-screen bg-hero-gradient">
-        {/* Header */}
-        <header className="p-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate("/calculate")}
-            className="text-foreground hover:text-primary hover:bg-primary/10 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Button>
-        </header>
-
-        {/* Main Content */}
-        <main className="flex items-center justify-center min-h-[80vh]">
-          <div className="container mx-auto px-6 text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-              Enter your sem-wise CGPA,
-            </h1>
-            <p className="text-2xl md:text-3xl text-primary mb-12">
-              no need to panic now 😊
-            </p>
-
-            <div className="max-w-md mx-auto space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="semesters" className="text-lg text-foreground">
-                  Enter the no. of Semesters:
-                </Label>
-                <Input
-                  id="semesters"
-                  type="number"
-                  min="1"
-                  max="8"
-                  placeholder="1 - 8"
-                  value={numSemesters}
-                  onChange={(e) => setNumSemesters(e.target.value)}
-                  className="text-center text-lg py-6 bg-input border-border focus:border-primary"
-                />
-              </div>
-              
-              <HeroButton onClick={handleContinue}>
-                Continue
-              </HeroButton>
-            </div>
-          </div>
-        </main>
-      </div>
-    );
-  }
 
   return (
-    <div className="min-h-screen bg-hero-gradient py-6">
+    <div className="min-h-screen bg-hero-gradient relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 -right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
+      </div>
+
       {/* Header */}
-      <header className="px-6 mb-8">
+      <header className="relative p-8">
         <Button
           variant="ghost"
-          onClick={() => setShowForm(false)}
-          className="text-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+          onClick={() => navigate("/")}
+          className="text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-xl"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          Back to Home
         </Button>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6">
-        <h1 className="text-3xl md:text-4xl font-bold text-primary text-center mb-8">
-          Enter Semester-wise SGPA
-        </h1>
+      <main className="relative flex items-center justify-center min-h-[80vh]">
+        <div className="container mx-auto px-8 text-center">
+          <div className="max-w-3xl mx-auto space-y-16">
+            <div className="space-y-6">
+              <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                What would you like to calculate?
+              </h1>
+              <p className="text-xl text-foreground/70 font-medium">
+                Choose your calculation type below
+              </p>
+            </div>
 
-        <div className="max-w-2xl mx-auto space-y-4">
-          {semesters.map((semester) => (
-            <Card key={semester.id} className="p-6 bg-card border-border">
-              <div className="grid md:grid-cols-2 gap-4 items-center">
-                <div className="text-center md:text-left">
-                  <h3 className="text-lg font-semibold text-foreground">
-                    Semester {semester.id}
+            <div className="grid md:grid-cols-2 gap-8">
+              <ModernCard className="p-0 cursor-pointer group hover:scale-105" onClick={() => navigate("/calculate/sgpa")}>
+                <ModernCardContent className="p-8 text-center">
+                  <div className="mx-auto mb-6 p-6 rounded-2xl bg-primary/10 w-fit group-hover:bg-primary/20 transition-colors">
+                    <Calculator className="h-12 w-12 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
+                    SGPA Calculator
                   </h3>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-foreground">SGPA</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max="10"
-                    placeholder="e.g., 8.5"
-                    value={semester.sgpa}
-                    onChange={(e) => updateSemester(semester.id, e.target.value)}
-                    className="bg-input border-border focus:border-primary"
-                  />
-                </div>
-              </div>
-            </Card>
-          ))}
-          
-          <div className="text-center space-y-6 mt-8">
-            <HeroButton onClick={calculateCGPA}>
-              Calculate CGPA
-            </HeroButton>
-            
-            {cgpa !== null && (
-              <Card className="p-8 bg-primary/10 border-primary/30 max-w-md mx-auto">
-                <h2 className="text-2xl font-bold text-primary mb-2">
-                  Your CGPA
-                </h2>
-                <p className="text-4xl font-bold text-primary">
-                  {cgpa}
-                </p>
-              </Card>
-            )}
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                    Calculate your Semester Grade Point Average based on subjects, credits, and grades
+                  </p>
+                  <ModernButton variant="glass" className="w-full">
+                    Calculate SGPA
+                  </ModernButton>
+                </ModernCardContent>
+              </ModernCard>
+
+              <ModernCard className="p-0 cursor-pointer group hover:scale-105" onClick={() => navigate("/calculate/cgpa")}>
+                <ModernCardContent className="p-8 text-center">
+                  <div className="mx-auto mb-6 p-6 rounded-2xl bg-accent/10 w-fit group-hover:bg-accent/20 transition-colors">
+                    <TrendingUp className="h-12 w-12 text-accent" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-accent transition-colors">
+                    CGPA Calculator
+                  </h3>
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                    Calculate your Cumulative Grade Point Average from semester-wise SGPA values
+                  </p>
+                  <ModernButton variant="glass" className="w-full">
+                    Calculate CGPA
+                  </ModernButton>
+                </ModernCardContent>
+              </ModernCard>
+            </div>
           </div>
         </div>
       </main>
@@ -204,4 +82,4 @@ const CGPACalculator = () => {
   );
 };
 
-export default CGPACalculator;
+export default Calculate;
