@@ -20,7 +20,7 @@ const Home = () => {
       {/* Header */}
       <header className="relative w-full p-8">
         <div className="container mx-auto flex items-center justify-between">
-          {/* Center Badge */}
+          {/* Center Badge 
           <div className="flex-1 flex justify-center">
             <Badge 
               className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 px-6 py-2 text-sm font-medium backdrop-blur-xl"
@@ -28,7 +28,7 @@ const Home = () => {
               <Sparkles className="w-4 h-4 mr-2" />
               Exclusively for UCET Students
             </Badge>
-          </div>
+          </div>*/}
 
           {/* Right Side: GitHub + LinkedIn */}
           <div className="flex gap-3 absolute right-8 top-8">
