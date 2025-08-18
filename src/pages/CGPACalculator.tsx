@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { HeroButton } from "@/components/HeroButton";
-import { Card } from "@/components/ui/card";
+import { ModernButton } from "@/components/ui/modern-button";
+import { ModernCard, ModernCardContent } from "@/components/ui/modern-card";
 import { useToast } from "@/hooks/use-toast";
 
 interface Semester {
@@ -85,13 +85,19 @@ const CGPACalculator = () => {
 
   if (!showForm) {
     return (
-      <div className="min-h-screen bg-hero-gradient">
+      <div className="min-h-screen bg-hero-gradient relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/3 -left-1/3 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
+          <div className="absolute bottom-1/3 -right-1/3 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
+        </div>
+
         {/* Header */}
-        <header className="p-6">
+        <header className="relative p-8">
           <Button
             variant="ghost"
             onClick={() => navigate("/calculate")}
-            className="text-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+            className="text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-xl"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
@@ -99,35 +105,47 @@ const CGPACalculator = () => {
         </header>
 
         {/* Main Content */}
-        <main className="flex items-center justify-center min-h-[80vh]">
-          <div className="container mx-auto px-6 text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-primary mb-4">
-              Enter your sem-wise CGPA,
-            </h1>
-            <p className="text-2xl md:text-3xl text-primary mb-12">
-              no need to panic now 😊
-            </p>
-
-            <div className="max-w-md mx-auto space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="semesters" className="text-lg text-foreground">
-                  Enter the no. of Semesters:
-                </Label>
-                <Input
-                  id="semesters"
-                  type="number"
-                  min="1"
-                  max="8"
-                  placeholder="1 - 8"
-                  value={numSemesters}
-                  onChange={(e) => setNumSemesters(e.target.value)}
-                  className="text-center text-lg py-6 bg-input border-border focus:border-primary"
-                />
+        <main className="relative flex items-center justify-center min-h-[80vh]">
+          <div className="container mx-auto px-8 text-center">
+            <div className="max-w-lg mx-auto space-y-12">
+              <div className="space-y-6">
+                <div className="mx-auto w-24 h-24 rounded-2xl bg-accent/10 flex items-center justify-center mb-8">
+                  <Calendar className="w-12 h-12 text-accent" />
+                </div>
+                <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary">
+                  Calculate your CGPA
+                </h1>
+                <p className="text-xl text-foreground/70 font-medium">
+                  Enter your semester-wise SGPA values - no need to panic! 😊
+                </p>
               </div>
-              
-              <HeroButton onClick={handleContinue}>
-                Continue
-              </HeroButton>
+
+              <ModernCard className="p-0">
+                <ModernCardContent className="p-8 space-y-8">
+                  <div className="space-y-4">
+                    <Label htmlFor="semesters" className="text-lg font-semibold text-foreground block">
+                      Number of Semesters Completed
+                    </Label>
+                    <Input
+                      id="semesters"
+                      type="number"
+                      min="1"
+                      max="8"
+                      placeholder="Enter between 1-8"
+                      value={numSemesters}
+                      onChange={(e) => setNumSemesters(e.target.value)}
+                      className="text-center text-xl py-6 bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl"
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Enter number of semesters between 1 and 8
+                    </p>
+                  </div>
+                  
+                  <ModernButton onClick={handleContinue} size="lg" className="w-full">
+                    Continue to SGPA Entry
+                  </ModernButton>
+                </ModernCardContent>
+              </ModernCard>
             </div>
           </div>
         </main>
@@ -136,13 +154,19 @@ const CGPACalculator = () => {
   }
 
   return (
-    <div className="min-h-screen bg-hero-gradient py-6">
+    <div className="min-h-screen bg-hero-gradient py-8 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-1/4 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
+        <div className="absolute bottom-1/4 -right-1/4 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
+      </div>
+
       {/* Header */}
-      <header className="px-6 mb-8">
+      <header className="relative px-8 mb-8">
         <Button
           variant="ghost"
           onClick={() => setShowForm(false)}
-          className="text-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+          className="text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-xl"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
@@ -150,52 +174,70 @@ const CGPACalculator = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6">
-        <h1 className="text-3xl md:text-4xl font-bold text-primary text-center mb-8">
-          Enter Semester-wise SGPA
-        </h1>
+      <main className="relative container mx-auto px-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary mb-4">
+            Semester SGPA Values
+          </h1>
+          <p className="text-lg text-foreground/70 font-medium">
+            Enter your SGPA for each completed semester
+          </p>
+        </div>
 
-        <div className="max-w-2xl mx-auto space-y-4">
+        <div className="max-w-3xl mx-auto space-y-6">
           {semesters.map((semester) => (
-            <Card key={semester.id} className="p-6 bg-card border-border">
-              <div className="grid md:grid-cols-2 gap-4 items-center">
-                <div className="text-center md:text-left">
-                  <h3 className="text-lg font-semibold text-foreground">
-                    Semester {semester.id}
-                  </h3>
+            <ModernCard key={semester.id} className="p-0">
+              <ModernCardContent className="p-6">
+                <div className="grid md:grid-cols-3 gap-6 items-center">
+                  <div className="text-center md:text-left">
+                    <div className="inline-flex items-center gap-3 bg-accent/10 rounded-xl px-4 py-2">
+                      <Calendar className="w-5 h-5 text-accent" />
+                      <span className="text-lg font-bold text-accent">
+                        Semester {semester.id}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3 md:col-span-2">
+                    <Label className="text-foreground font-semibold">SGPA (0.00 - 10.00)</Label>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      max="10"
+                      placeholder="e.g., 8.75"
+                      value={semester.sgpa}
+                      onChange={(e) => updateSemester(semester.id, e.target.value)}
+                      className="bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl text-center font-medium text-lg py-3"
+                    />
+                  </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-foreground">SGPA</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    max="10"
-                    placeholder="e.g., 8.5"
-                    value={semester.sgpa}
-                    onChange={(e) => updateSemester(semester.id, e.target.value)}
-                    className="bg-input border-border focus:border-primary"
-                  />
-                </div>
-              </div>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
           ))}
           
-          <div className="text-center space-y-6 mt-8">
-            <HeroButton onClick={calculateCGPA}>
-              Calculate CGPA
-            </HeroButton>
+          <div className="text-center space-y-8 mt-12">
+            <ModernButton onClick={calculateCGPA} size="xl" className="px-12">
+              Calculate My CGPA
+            </ModernButton>
             
             {cgpa !== null && (
-              <Card className="p-8 bg-primary/10 border-primary/30 max-w-md mx-auto">
-                <h2 className="text-2xl font-bold text-primary mb-2">
-                  Your CGPA
-                </h2>
-                <p className="text-4xl font-bold text-primary">
-                  {cgpa}
-                </p>
-              </Card>
+              <ModernCard className="p-0 max-w-md mx-auto bg-gradient-to-r from-accent/10 to-primary/10 border-accent/30">
+                <ModernCardContent className="p-8 text-center">
+                  <div className="mb-4">
+                    <Trophy className="w-12 h-12 text-accent mx-auto mb-3" />
+                    <h2 className="text-2xl font-bold text-foreground mb-2">
+                      Your CGPA is
+                    </h2>
+                  </div>
+                  <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary mb-2">
+                    {cgpa}
+                  </div>
+                  <p className="text-muted-foreground font-medium">
+                    Excellent academic performance!
+                  </p>
+                </ModernCardContent>
+              </ModernCard>
             )}
           </div>
         </div>

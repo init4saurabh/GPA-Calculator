@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, Minus } from "lucide-react";
+import { ArrowLeft, BookOpen, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { HeroButton } from "@/components/HeroButton";
-import { Card } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ModernButton } from "@/components/ui/modern-button";
+import { ModernCard, ModernCardContent } from "@/components/ui/modern-card";
+
 import { useToast } from "@/hooks/use-toast";
 
 interface Subject {
   id: number;
   credits: string;
-  grade: string;
+  marks: string;
 }
 
 const SGPACalculator = () => {
@@ -23,14 +23,14 @@ const SGPACalculator = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [sgpa, setSGPA] = useState<number | null>(null);
 
-  const gradePoints: { [key: string]: number } = {
-    "O": 10,
-    "A+": 9,
-    "A": 8,
-    "B+": 7,
-    "B": 6,
-    "C": 5,
-    "F": 0
+  const convertMarksToGradePoint = (marks: number): number => {
+    if (marks >= 90) return 10; // O
+    if (marks >= 80) return 9;  // A+
+    if (marks >= 70) return 8;  // A
+    if (marks >= 60) return 7;  // B+
+    if (marks >= 50) return 6;  // B
+    if (marks >= 40) return 5;  // C
+    return 0; // F
   };
 
   const handleContinue = () => {
@@ -47,7 +47,7 @@ const SGPACalculator = () => {
     const newSubjects = Array.from({ length: num }, (_, i) => ({
       id: i + 1,
       credits: "",
-      grade: ""
+      marks: ""
     }));
     setSubjects(newSubjects);
     setShowForm(true);
@@ -58,17 +58,28 @@ const SGPACalculator = () => {
     let totalGradePoints = 0;
     
     for (const subject of subjects) {
-      if (!subject.credits || !subject.grade) {
+      if (!subject.credits || !subject.marks) {
         toast({
           title: "Incomplete Data",
-          description: "Please fill in all subjects' credits and grades",
+          description: "Please fill in all subjects' credits and marks",
           variant: "destructive"
         });
         return;
       }
       
       const credits = parseFloat(subject.credits);
-      const gradePoint = gradePoints[subject.grade];
+      const marks = parseFloat(subject.marks);
+      
+      if (marks < 0 || marks > 100) {
+        toast({
+          title: "Invalid Marks",
+          description: "Marks must be between 0 and 100",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      const gradePoint = convertMarksToGradePoint(marks);
       
       totalCredits += credits;
       totalGradePoints += credits * gradePoint;
@@ -83,7 +94,7 @@ const SGPACalculator = () => {
     });
   };
 
-  const updateSubject = (id: number, field: "credits" | "grade", value: string) => {
+  const updateSubject = (id: number, field: "credits" | "marks", value: string) => {
     setSubjects(prev => prev.map(subject => 
       subject.id === id ? { ...subject, [field]: value } : subject
     ));
@@ -91,13 +102,19 @@ const SGPACalculator = () => {
 
   if (!showForm) {
     return (
-      <div className="min-h-screen bg-hero-gradient">
+      <div className="min-h-screen bg-hero-gradient relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/3 -left-1/3 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
+          <div className="absolute bottom-1/3 -right-1/3 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
+        </div>
+
         {/* Header */}
-        <header className="p-6">
+        <header className="relative p-8">
           <Button
             variant="ghost"
             onClick={() => navigate("/calculate")}
-            className="text-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+            className="text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-xl"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
@@ -105,32 +122,47 @@ const SGPACalculator = () => {
         </header>
 
         {/* Main Content */}
-        <main className="flex items-center justify-center min-h-[80vh]">
-          <div className="container mx-auto px-6 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-primary mb-12">
-              Tell us how your semester went +_+
-            </h1>
-
-            <div className="max-w-md mx-auto space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="subjects" className="text-lg text-foreground">
-                  Enter the no. of Subjects:
-                </Label>
-                <Input
-                  id="subjects"
-                  type="number"
-                  min="1"
-                  max="13"
-                  placeholder="1 - 13"
-                  value={numSubjects}
-                  onChange={(e) => setNumSubjects(e.target.value)}
-                  className="text-center text-lg py-6 bg-input border-border focus:border-primary"
-                />
+        <main className="relative flex items-center justify-center min-h-[80vh]">
+          <div className="container mx-auto px-8 text-center">
+            <div className="max-w-lg mx-auto space-y-12">
+              <div className="space-y-6">
+                <div className="mx-auto w-24 h-24 rounded-2xl bg-primary/10 flex items-center justify-center mb-8">
+                  <BookOpen className="w-12 h-12 text-primary" />
+                </div>
+                <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                  Let's calculate your SGPA
+                </h1>
+                <p className="text-xl text-foreground/70 font-medium">
+                  How many subjects did you take this semester?
+                </p>
               </div>
-              
-              <HeroButton onClick={handleContinue}>
-                Continue
-              </HeroButton>
+
+              <ModernCard className="p-0">
+                <ModernCardContent className="p-8 space-y-8">
+                  <div className="space-y-4">
+                    <Label htmlFor="subjects" className="text-lg font-semibold text-foreground block">
+                      Number of Subjects
+                    </Label>
+                    <Input
+                      id="subjects"
+                      type="number"
+                      min="1"
+                      max="13"
+                      placeholder="Enter between 1-13"
+                      value={numSubjects}
+                      onChange={(e) => setNumSubjects(e.target.value)}
+                      className="text-center text-xl py-6 bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl"
+                    />
+                    <p className="text-sm text-muted-foreground">
+                      Enter a number between 1 and 13
+                    </p>
+                  </div>
+                  
+                  <ModernButton onClick={handleContinue} size="lg" className="w-full">
+                    Continue to Subject Details
+                  </ModernButton>
+                </ModernCardContent>
+              </ModernCard>
             </div>
           </div>
         </main>
@@ -139,13 +171,19 @@ const SGPACalculator = () => {
   }
 
   return (
-    <div className="min-h-screen bg-hero-gradient py-6">
+    <div className="min-h-screen bg-hero-gradient py-8 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 -left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
+        <div className="absolute bottom-1/4 -right-1/4 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
+      </div>
+
       {/* Header */}
-      <header className="px-6 mb-8">
+      <header className="relative px-8 mb-8">
         <Button
           variant="ghost"
           onClick={() => setShowForm(false)}
-          className="text-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+          className="text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-xl"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
@@ -153,70 +191,83 @@ const SGPACalculator = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-6">
-        <h1 className="text-3xl md:text-4xl font-bold text-primary text-center mb-8">
-          Enter Subject Details
-        </h1>
+      <main className="relative container mx-auto px-8">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-4">
+            Subject Details
+          </h1>
+          <p className="text-lg text-foreground/70 font-medium">
+            Enter credits and marks for each subject
+          </p>
+        </div>
 
-        <div className="max-w-4xl mx-auto space-y-4">
+        <div className="max-w-5xl mx-auto space-y-6">
           {subjects.map((subject) => (
-            <Card key={subject.id} className="p-6 bg-card border-border">
-              <div className="grid md:grid-cols-3 gap-4 items-center">
-                <div className="text-center md:text-left">
-                  <h3 className="text-lg font-semibold text-foreground">
-                    Subject {subject.id}
-                  </h3>
+            <ModernCard key={subject.id} className="p-0">
+              <ModernCardContent className="p-6">
+                <div className="grid md:grid-cols-4 gap-6 items-center">
+                  <div className="text-center md:text-left">
+                    <div className="inline-flex items-center gap-3 bg-primary/10 rounded-xl px-4 py-2">
+                      <BookOpen className="w-5 h-5 text-primary" />
+                      <span className="text-lg font-bold text-primary">
+                        Subject {subject.id}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <Label className="text-foreground font-semibold">Credits</Label>
+                    <Input
+                      type="number"
+                      placeholder="e.g., 4"
+                      value={subject.credits}
+                      onChange={(e) => updateSubject(subject.id, "credits", e.target.value)}
+                      className="bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl text-center font-medium"
+                    />
+                  </div>
+                  
+                  <div className="space-y-3 md:col-span-2">
+                    <Label className="text-foreground font-semibold">Marks (0-100)</Label>
+                    <Input
+                      type="number"
+                      min="0"
+                      max="100"
+                      placeholder="e.g., 85"
+                      value={subject.marks}
+                      onChange={(e) => updateSubject(subject.id, "marks", e.target.value)}
+                      className="bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl text-center font-medium"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      90-100: O (10pts) • 80-89: A+ (9pts) • 70-79: A (8pts) • 60-69: B+ (7pts) • 50-59: B (6pts) • 40-49: C (5pts) • Below 40: F (0pts)
+                    </p>
+                  </div>
                 </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-foreground">Credits</Label>
-                  <Input
-                    type="number"
-                    placeholder="e.g., 4"
-                    value={subject.credits}
-                    onChange={(e) => updateSubject(subject.id, "credits", e.target.value)}
-                    className="bg-input border-border focus:border-primary"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-foreground">Grade</Label>
-                  <Select
-                    value={subject.grade}
-                    onValueChange={(value) => updateSubject(subject.id, "grade", value)}
-                  >
-                    <SelectTrigger className="bg-input border-border focus:border-primary">
-                      <SelectValue placeholder="Select grade" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="O">O (10)</SelectItem>
-                      <SelectItem value="A+">A+ (9)</SelectItem>
-                      <SelectItem value="A">A (8)</SelectItem>
-                      <SelectItem value="B+">B+ (7)</SelectItem>
-                      <SelectItem value="B">B (6)</SelectItem>
-                      <SelectItem value="C">C (5)</SelectItem>
-                      <SelectItem value="F">F (0)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </Card>
+              </ModernCardContent>
+            </ModernCard>
           ))}
           
-          <div className="text-center space-y-6 mt-8">
-            <HeroButton onClick={calculateSGPA}>
-              Calculate SGPA
-            </HeroButton>
+          <div className="text-center space-y-8 mt-12">
+            <ModernButton onClick={calculateSGPA} size="xl" className="px-12">
+              Calculate My SGPA
+            </ModernButton>
             
             {sgpa !== null && (
-              <Card className="p-8 bg-primary/10 border-primary/30 max-w-md mx-auto">
-                <h2 className="text-2xl font-bold text-primary mb-2">
-                  Your SGPA
-                </h2>
-                <p className="text-4xl font-bold text-primary">
-                  {sgpa}
-                </p>
-              </Card>
+              <ModernCard className="p-0 max-w-md mx-auto bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30">
+                <ModernCardContent className="p-8 text-center">
+                  <div className="mb-4">
+                    <Star className="w-12 h-12 text-primary mx-auto mb-3" />
+                    <h2 className="text-2xl font-bold text-foreground mb-2">
+                      Your SGPA is
+                    </h2>
+                  </div>
+                  <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-2">
+                    {sgpa}
+                  </div>
+                  <p className="text-muted-foreground font-medium">
+                    Great job this semester!
+                  </p>
+                </ModernCardContent>
+              </ModernCard>
             )}
           </div>
         </div>
