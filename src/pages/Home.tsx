@@ -3,12 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { ModernButton } from "@/components/ui/modern-button";
 import { ModernCard, ModernCardContent } from "@/components/ui/modern-card";
 import { GraduationCap, Calculator, Zap, Sparkles, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button"; // shadcn button
+import { Github, Linkedin } from "lucide-react"; // icons
 
 const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-hero-gradient relative overflow-hidden">
+    <div className="min-h-screen bg-hero-gradient relative overflow-hidden flex flex-col">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-primary/5 to-transparent rounded-full animate-pulse" />
@@ -17,14 +19,37 @@ const Home = () => {
 
       {/* Header */}
       <header className="relative w-full p-8">
-        <div className="container mx-auto">
-          <div className="flex items-center justify-center">
+        <div className="container mx-auto flex items-center justify-between">
+          {/* Center Badge */}
+          <div className="flex-1 flex justify-center">
             <Badge 
               className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 px-6 py-2 text-sm font-medium backdrop-blur-xl"
             >
               <Sparkles className="w-4 h-4 mr-2" />
               Exclusively for UCET Students
             </Badge>
+          </div>
+
+          {/* Right Side: GitHub + LinkedIn */}
+          <div className="flex gap-3 absolute right-8 top-8">
+            <Button variant="outline" size="icon" asChild>
+              <a 
+                href="https://github.com/init4saurabh" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <Github className="h-5 w-5" />
+              </a>
+            </Button>
+            <Button variant="outline" size="icon" asChild>
+              <a 
+                href="https://www.linkedin.com/in/saurabh-kumar-6196052ba/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
+            </Button>
           </div>
         </div>
       </header>
@@ -89,6 +114,14 @@ const Home = () => {
           </div>
         </div>
       </main>
+
+      {/* Footer line inside Home.tsx */}
+      <footer className="w-full text-center py-6 border-t border-gray-800 mt-10">
+        <p className="text-sm text-gray-400">
+          Made with <span className="text-red-500">❤️</span> by{" "}
+          <span className="font-semibold">Saurabh</span>
+        </p>
+      </footer>
     </div>
   );
 };

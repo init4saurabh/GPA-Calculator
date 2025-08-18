@@ -7,7 +7,9 @@ import Home from "./pages/Home";
 import Calculate from "./pages/Calculate";
 import SGPACalculator from "./pages/SGPACalculator";
 import CGPACalculator from "./pages/CGPACalculator";
+
 import NotFound from "./pages/NotFound";
+
 
 const queryClient = new QueryClient();
 
@@ -25,6 +27,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
