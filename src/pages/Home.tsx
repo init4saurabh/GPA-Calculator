@@ -11,26 +11,16 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-hero-gradient relative overflow-hidden flex flex-col">
-      {/* Animated background elements */}
+      
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-primary/5 to-transparent rounded-full animate-pulse" />
         <div className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-accent/5 to-transparent rounded-full animate-pulse" />
       </div>
 
-      {/* Header */}
+      
       <header className="relative w-full p-8">
         <div className="container mx-auto flex items-center justify-between">
-          {/* Center Badge 
-          <div className="flex-1 flex justify-center">
-            <Badge 
-              className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20 px-6 py-2 text-sm font-medium backdrop-blur-xl"
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              Exclusively for UCET Students
-            </Badge>
-          </div>*/}
-
-          {/* Right Side: GitHub + LinkedIn */}
+          
           <div className="flex gap-3 absolute right-8 top-8">
             <Button variant="outline" size="icon" asChild>
               <a 
@@ -54,7 +44,7 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Hero Section */}
+      
       <main className="relative flex-1 flex items-center justify-center py-16">
         <div className="container mx-auto px-8 text-center">
           <div className="max-w-4xl mx-auto space-y-8">
@@ -78,7 +68,7 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Features */}
+          
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mt-24">
             {[
               {
@@ -116,7 +106,7 @@ const Home = () => {
         
       </main>
 
-      {/* F line inside Home.tsx */}
+     
       <footer className="w-full text-center py-6 border-t border-gray-800 mt-10">
         <p className="text-sm text-gray-400">
           Made with <span className="text-red-500">❤️</span> by{" "}

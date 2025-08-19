@@ -27,10 +27,10 @@ const SGPACalculator = () => {
     if (marks >= 90) return 10; // A+
     if (marks >= 80) return 9;  // A
     if (marks >= 70) return 8;  // B+
-    if (marks >= 60) return 7;  // B
+    if (marks >= 60) return 7;  // B  // check kisi ne number 0-100 k bahar bhi dala wala case
     if (marks >= 50) return 6;  // C+
-    if (marks >= 35) return 5;  // C
-    return 0; // F
+    if (marks >= 35) return 5;  // C 
+    return 0; // Fail ho gya
   };
 
   const handleContinue = () => {
@@ -103,13 +103,13 @@ const SGPACalculator = () => {
   if (!showForm) {
     return (
       <div className="min-h-screen bg-hero-gradient relative overflow-hidden">
-        {/* Background decoration */}
+       
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/3 -left-1/3 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
           <div className="absolute bottom-1/3 -right-1/3 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
         </div>
 
-        {/* Header */}
+        
         <header className="relative p-8">
           <Button
             variant="ghost"
@@ -121,7 +121,6 @@ const SGPACalculator = () => {
           </Button>
         </header>
 
-        {/* Main Content */}
         <main className="relative flex items-center justify-center min-h-[80vh]">
           <div className="container mx-auto px-8 text-center">
             <div className="max-w-lg mx-auto space-y-12">
@@ -172,13 +171,13 @@ const SGPACalculator = () => {
 
   return (
     <div className="min-h-screen bg-hero-gradient py-8 relative overflow-hidden">
-      {/* Background decoration */}
+     
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 -left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
         <div className="absolute bottom-1/4 -right-1/4 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
       </div>
 
-      {/* Header */}
+     
       <header className="relative px-8 mb-8">
         <Button
           variant="ghost"
@@ -190,7 +189,7 @@ const SGPACalculator = () => {
         </Button>
       </header>
 
-      {/* Main Content */}
+      
       <main className="relative container mx-auto px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-4">
