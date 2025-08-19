@@ -24,12 +24,12 @@ const SGPACalculator = () => {
   const [sgpa, setSGPA] = useState<number | null>(null);
 
   const convertMarksToGradePoint = (marks: number): number => {
-    if (marks >= 90) return 10; // O
-    if (marks >= 80) return 9;  // A+
-    if (marks >= 70) return 8;  // A
-    if (marks >= 60) return 7;  // B+
-    if (marks >= 50) return 6;  // B
-    if (marks >= 40) return 5;  // C
+    if (marks >= 90) return 10; // A+
+    if (marks >= 80) return 9;  // A
+    if (marks >= 70) return 8;  // B+
+    if (marks >= 60) return 7;  // B
+    if (marks >= 50) return 6;  // C+
+    if (marks >= 35) return 5;  // C
     return 0; // F
   };
 
@@ -238,7 +238,7 @@ const SGPACalculator = () => {
                       className="bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl text-center font-medium"
                     />
                     <p className="text-xs text-muted-foreground">
-                      90-100: O(10pts) • 80-89: A+(9pts) • 70-79: A(8pts) • 60-69: B+(7pts) • 50-59: B(6pts) • 40-49: C(5pts) • Below 40: F(0pts)
+                      90-100: A+(10pts) • 80-89: A(9pts) • 70-79: B+(8pts) • 60-69: B(7pts) • 50-59: C+(6pts) • 40-49: C(5pts) • Below 35: F(0pts)
                     </p>
                   </div>
                 </div>
@@ -264,7 +264,7 @@ const SGPACalculator = () => {
                     {sgpa}
                   </div>
                   <p className="text-muted-foreground font-medium">
-                    {sgpa >= 9 ? "Party!" : sgpa >= 7 ? "Badhiya hai" : "Thoda pdho yrr !"}
+                    {sgpa >= 9 ? "Party!" : sgpa >= 7 ? "Good job !" : "Improve karo !"}
                   </p>
                 </ModernCardContent>
               </ModernCard>
