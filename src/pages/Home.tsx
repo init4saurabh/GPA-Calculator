@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowDownRight, ArrowRight, Check, Sigma, Sparkles, Zap } from "lucide-react";
 import { ModernButton } from "@/components/ui/modern-button";
 import SiteHeader from "@/components/SiteHeader";
+import BrandLogo from "@/components/BrandLogo";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -93,8 +94,39 @@ const Home = () => {
         </section>
       </main>
 
-      <footer className="border-t-2 border-foreground bg-primary">
-        <div className="site-container flex flex-col gap-3 py-6 text-xs font-black uppercase tracking-[0.14em] sm:flex-row sm:items-center sm:justify-between"><span>GPA. — Keep your numbers honest.</span><span>Made by Saurabh · {new Date().getFullYear()}</span></div>
+      <footer className="border-t-2 border-foreground">
+        <div className="bg-secondary">
+          <div className="site-container grid items-center gap-7 py-10 md:grid-cols-[1fr_auto] md:py-12">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-foreground/60">Ready when you are</p>
+              <h2 className="display-title mt-3 max-w-4xl text-4xl sm:text-6xl">Make the numbers make sense.</h2>
+            </div>
+            <button onClick={() => navigate("/calculate")} className="group flex h-16 items-center justify-between gap-8 border-2 border-foreground bg-primary px-6 text-xs font-black uppercase tracking-[0.14em] shadow-[5px_5px_0_#171513] transition-all hover:-translate-y-1 hover:shadow-[7px_7px_0_#171513]">
+              Start calculating <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-foreground text-background">
+          <div className="site-container py-10 sm:py-12">
+            <div className="grid gap-10 border-b border-background/20 pb-10 md:grid-cols-[1fr_auto] md:items-end">
+              <div>
+                <BrandLogo inverse large />
+                <p className="mt-5 max-w-md text-sm font-semibold leading-relaxed text-background/55">A small, focused academic tool for UCET students. No accounts, no clutter, just the number you came for.</p>
+              </div>
+              <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-xs font-black uppercase tracking-[0.13em] sm:grid-cols-4">
+                <button onClick={() => navigate("/calculate/sgpa")} className="text-left transition-colors hover:text-secondary">SGPA</button>
+                <button onClick={() => navigate("/calculate/cgpa")} className="text-left transition-colors hover:text-secondary">CGPA</button>
+                <a href="https://github.com/init4saurabh" target="_blank" rel="noreferrer" className="transition-colors hover:text-secondary">GitHub</a>
+                <a href="https://www.linkedin.com/in/saurabh-kumar-6196052ba/" target="_blank" rel="noreferrer" className="transition-colors hover:text-secondary">LinkedIn</a>
+              </div>
+            </div>
+            <div className="flex flex-col gap-3 pt-6 text-[10px] font-bold uppercase tracking-[0.16em] text-background/45 sm:flex-row sm:items-center sm:justify-between">
+              <span>Built with intent, not templates.</span>
+              <span>Designed & developed by Saurabh · {new Date().getFullYear()}</span>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
