@@ -1,27 +1,22 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ModernButton } from "@/components/ui/modern-button";
+import SiteHeader from "@/components/SiteHeader";
 
 const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: route sahi karo :",
-      location.pathname
-    );
-  }, [location.pathname]);
-
+  const navigate = useNavigate();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
-      </div>
+    <div className="page-shell min-h-screen">
+      <SiteHeader />
+      <main className="site-container flex min-h-[calc(100vh-80px)] items-center py-16">
+        <div>
+          <span className="eyebrow">Error / 404</span>
+          <h1 className="display-title mt-6 text-[clamp(6rem,22vw,18rem)] text-primary">Lost?</h1>
+          <p className="max-w-xl text-xl font-black uppercase leading-snug">This page skipped class. Let’s get you back to the calculator.</p>
+          <ModernButton size="lg" onClick={() => navigate("/")} className="mt-8"><ArrowLeft /> Back home</ModernButton>
+        </div>
+      </main>
     </div>
   );
 };
-
 export default NotFound;

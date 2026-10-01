@@ -1,85 +1,50 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Calculator, TrendingUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ModernButton } from "@/components/ui/modern-button";
-import { ModernCard, ModernCardContent } from "@/components/ui/modern-card";
+import { ArrowUpRight, BookOpen, Layers3 } from "lucide-react";
+import SiteHeader from "@/components/SiteHeader";
 
 const Calculate = () => {
   const navigate = useNavigate();
+  const options = [
+    { label: "SGPA", title: "One semester. One clear score.", description: "Use subject credits and marks to calculate your Semester Grade Point Average.", meta: "Up to 13 subjects", icon: BookOpen, accent: "bg-primary", path: "/calculate/sgpa" },
+    { label: "CGPA", title: "The bigger academic picture.", description: "Combine semester-wise SGPA values into one cumulative grade point average.", meta: "Up to 8 semesters", icon: Layers3, accent: "bg-secondary", path: "/calculate/cgpa" },
+  ];
 
   return (
-    <div className="min-h-screen bg-hero-gradient relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 -right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-      </div>
-
-      {/* Header */}
-      <header className="relative p-8">
-        <Button
-          variant="ghost"
-          onClick={() => navigate("/")}
-          className="text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-xl"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Home
-        </Button>
-      </header>
-
-      {/* Main Content */}
-      <main className="relative flex items-center justify-center min-h-[80vh]">
-        <div className="container mx-auto px-8 text-center">
-          <div className="max-w-3xl mx-auto space-y-16">
-            <div className="space-y-6">
-              <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                What would you like to calculate?
-              </h1>
-              <p className="text-xl text-foreground/70 font-medium">
-                Choose your calculation type below
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              <ModernCard className="p-0 cursor-pointer group hover:scale-105" onClick={() => navigate("/calculate/sgpa")}>
-                <ModernCardContent className="p-8 text-center">
-                  <div className="mx-auto mb-6 p-6 rounded-2xl bg-primary/10 w-fit group-hover:bg-primary/20 transition-colors">
-                    <Calculator className="h-12 w-12 text-primary" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-primary transition-colors">
-                    SGPA Calculator
-                  </h3>
-                  <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                    Calculate your Semester Grade Point Average based on subjects, credits, and grades
-                  </p>
-                  <ModernButton variant="glass" className="w-full">
-                    Calculate SGPA
-                  </ModernButton>
-                </ModernCardContent>
-              </ModernCard>
-
-              <ModernCard className="p-0 cursor-pointer group hover:scale-105" onClick={() => navigate("/calculate/cgpa")}>
-                <ModernCardContent className="p-8 text-center">
-                  <div className="mx-auto mb-6 p-6 rounded-2xl bg-accent/10 w-fit group-hover:bg-accent/20 transition-colors">
-                    <TrendingUp className="h-12 w-12 text-accent" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-foreground mb-4 group-hover:text-accent transition-colors">
-                    CGPA Calculator
-                  </h3>
-                  <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                    Calculate your Cumulative Grade Point Average from semester-wise SGPA values
-                  </p>
-                  <ModernButton variant="glass" className="w-full">
-                    Calculate CGPA
-                  </ModernButton>
-                </ModernCardContent>
-              </ModernCard>
-            </div>
+    <div className="page-shell min-h-screen">
+      <SiteHeader backTo="/" backLabel="Home" />
+      <main className="site-container py-14 md:py-20">
+        <div className="mb-12 grid items-end gap-6 lg:grid-cols-[1fr_auto]">
+          <div>
+            <span className="eyebrow">Choose your route</span>
+            <h1 className="display-title mt-6 max-w-4xl text-6xl sm:text-7xl lg:text-8xl">What are we calculating?</h1>
           </div>
+          <p className="max-w-sm border-l-4 border-primary pl-5 font-semibold leading-relaxed text-muted-foreground lg:mb-2">Pick the number you need. The calculator handles the formula; you bring the grades.</p>
+        </div>
+
+        <div className="grid gap-7 lg:grid-cols-2">
+          {options.map((option, index) => (
+            <button key={option.label} onClick={() => navigate(option.path)} className="group hard-card relative min-h-[430px] overflow-hidden p-7 text-left transition-transform hover:-translate-y-1 md:p-10">
+              <span className={`absolute -right-20 -top-20 h-56 w-56 rounded-full border-2 border-foreground ${option.accent} transition-transform duration-500 group-hover:scale-[1.35]`} />
+              <div className="relative flex h-full flex-col">
+                <div className="flex items-start justify-between">
+                  <span className="text-xs font-black uppercase tracking-[0.18em]">Option 0{index + 1}</span>
+                  <span className="grid h-14 w-14 place-items-center border-2 border-foreground bg-card"><option.icon className="h-6 w-6" strokeWidth={2.5} /></span>
+                </div>
+                <div className="mt-auto pt-24">
+                  <p className="display-title text-7xl sm:text-8xl">{option.label}<span className="text-primary">.</span></p>
+                  <h2 className="mt-5 max-w-md text-2xl font-black uppercase leading-tight tracking-tight">{option.title}</h2>
+                  <p className="mt-4 max-w-md font-medium leading-relaxed text-muted-foreground">{option.description}</p>
+                  <div className="mt-8 flex items-center justify-between border-t-2 border-foreground pt-5">
+                    <span className="text-[11px] font-black uppercase tracking-[0.15em]">{option.meta}</span>
+                    <span className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em]">Open calculator <ArrowUpRight className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" /></span>
+                  </div>
+                </div>
+              </div>
+            </button>
+          ))}
         </div>
       </main>
     </div>
   );
 };
-
 export default Calculate;

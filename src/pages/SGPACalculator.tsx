@@ -1,19 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, BookOpen, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ArrowRight, BookOpen, RotateCcw, Sparkles } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ModernButton } from "@/components/ui/modern-button";
-import { ModernCard, ModernCardContent } from "@/components/ui/modern-card";
-
+import SiteHeader from "@/components/SiteHeader";
 import { useToast } from "@/hooks/use-toast";
 
-interface Subject {
-  id: number;
-  credits: string;
-  marks: string;
-}
+interface Subject { id: number; credits: string; marks: string; }
 
 const SGPACalculator = () => {
   const navigate = useNavigate();
@@ -23,145 +16,64 @@ const SGPACalculator = () => {
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [sgpa, setSGPA] = useState<number | null>(null);
 
-  const convertMarksToGradePoint = (marks: number): number => {
-    if (marks >= 90) return 10; // A+
-    if (marks >= 80) return 9;  // A
-    if (marks >= 70) return 8;  // B+
-    if (marks >= 60) return 7;  // B  // check kisi ne number 0-100 k bahar bhi dala wala case
-    if (marks >= 50) return 6;  // C+
-    if (marks >= 35) return 5;  // C 
-    return 0; // Fail ho gya
-  };
+  const gradePoint = (marks: number) => marks >= 90 ? 10 : marks >= 80 ? 9 : marks >= 70 ? 8 : marks >= 60 ? 7 : marks >= 50 ? 6 : marks >= 35 ? 5 : 0;
 
   const handleContinue = () => {
-    const num = parseInt(numSubjects);
-    if (num < 1 || num > 13) {
-      toast({
-        title: "Invalid Input",
-        description: "Number of subjects must be between 1 and 13",
-        variant: "destructive"
-      });
+    const count = Number(numSubjects);
+    if (!Number.isInteger(count) || count < 1 || count > 13) {
+      toast({ title: "Check that number", description: "Enter a whole number between 1 and 13.", variant: "destructive" });
       return;
     }
-    
-    const newSubjects = Array.from({ length: num }, (_, i) => ({
-      id: i + 1,
-      credits: "",
-      marks: ""
-    }));
-    setSubjects(newSubjects);
+    setSubjects(Array.from({ length: count }, (_, index) => ({ id: index + 1, credits: "", marks: "" })));
+    setSGPA(null);
     setShowForm(true);
+  };
+
+  const updateSubject = (id: number, field: "credits" | "marks", value: string) => {
+    setSubjects((current) => current.map((subject) => subject.id === id ? { ...subject, [field]: value } : subject));
+    setSGPA(null);
   };
 
   const calculateSGPA = () => {
     let totalCredits = 0;
-    let totalGradePoints = 0;
-    
+    let weightedPoints = 0;
     for (const subject of subjects) {
-      if (!subject.credits || !subject.marks) {
-        toast({
-          title: "Incomplete Data",
-          description: "Please fill in all subjects' credits and marks",
-          variant: "destructive"
-        });
-        return;
+      const credits = Number(subject.credits);
+      const marks = Number(subject.marks);
+      if (!subject.credits || !subject.marks || !Number.isFinite(credits) || !Number.isFinite(marks)) {
+        toast({ title: "A few blanks remain", description: "Fill credits and marks for every subject.", variant: "destructive" }); return;
       }
-      
-      const credits = parseFloat(subject.credits);
-      const marks = parseFloat(subject.marks);
-      
-      if (marks < 0 || marks > 100) {
-        toast({
-          title: "Invalid Marks",
-          description: "Marks must be between 0 and 100",
-          variant: "destructive"
-        });
-        return;
-      }
-      
-      const gradePoint = convertMarksToGradePoint(marks);
-      
+      if (credits <= 0) { toast({ title: "Invalid credits", description: `Subject ${subject.id} needs credits greater than zero.`, variant: "destructive" }); return; }
+      if (marks < 0 || marks > 100) { toast({ title: "Invalid marks", description: `Subject ${subject.id} marks must be between 0 and 100.`, variant: "destructive" }); return; }
       totalCredits += credits;
-      totalGradePoints += credits * gradePoint;
+      weightedPoints += credits * gradePoint(marks);
     }
-    
-    const calculatedSGPA = totalGradePoints / totalCredits;
-    setSGPA(Math.round(calculatedSGPA * 100) / 100);
-    
-    toast({
-      title: "SGPA Calculated!",
-      description: `Your SGPA is ${Math.round(calculatedSGPA * 100) / 100}`,
-    });
-  };
-
-  const updateSubject = (id: number, field: "credits" | "marks", value: string) => {
-    setSubjects(prev => prev.map(subject => 
-      subject.id === id ? { ...subject, [field]: value } : subject
-    ));
+    const result = Math.round((weightedPoints / totalCredits) * 100) / 100;
+    setSGPA(result);
+    toast({ title: "Done — SGPA calculated", description: `Your semester score is ${result}.` });
   };
 
   if (!showForm) {
     return (
-      <div className="min-h-screen bg-hero-gradient relative overflow-hidden">
-       
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/3 -left-1/3 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
-          <div className="absolute bottom-1/3 -right-1/3 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
-        </div>
-
-        
-        <header className="relative p-8">
-          <Button
-            variant="ghost"
-            onClick={() => navigate("/calculate")}
-            className="text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-xl"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
-          </Button>
-        </header>
-
-        <main className="relative flex items-center justify-center min-h-[80vh]">
-          <div className="container mx-auto px-8 text-center">
-            <div className="max-w-lg mx-auto space-y-12">
-              <div className="space-y-6">
-                <div className="mx-auto w-24 h-24 rounded-2xl bg-primary/10 flex items-center justify-center mb-8">
-                  <BookOpen className="w-12 h-12 text-primary" />
-                </div>
-                <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                  Let's calculate your SGPA
-                </h1>
-                <p className="text-xl text-foreground/70 font-medium">
-                  How many subjects did you take this semester?
-                </p>
+      <div className="page-shell min-h-screen">
+        <SiteHeader backTo="/calculate" backLabel="Calculators" />
+        <main className="site-container grid min-h-[calc(100vh-80px)] items-center gap-12 py-14 lg:grid-cols-[1fr_.85fr]">
+          <div>
+            <span className="eyebrow"><BookOpen className="h-3.5 w-3.5" /> SGPA setup</span>
+            <h1 className="display-title mt-7 max-w-3xl text-6xl sm:text-8xl lg:text-9xl">Start with your subjects.</h1>
+            <p className="mt-7 max-w-xl text-lg font-semibold leading-relaxed text-muted-foreground">Tell us how many subjects you took. We’ll build a clean grade sheet for the rest.</p>
+          </div>
+          <div className="relative">
+            <div className="absolute -right-4 -top-4 h-full w-full border-2 border-foreground bg-secondary" />
+            <div className="relative border-2 border-foreground bg-card p-7 sm:p-10">
+              <div className="mb-10 flex items-start justify-between border-b-2 border-foreground pb-6">
+                <div><p className="text-xs font-black uppercase tracking-[0.16em]">Step 01 / 02</p><h2 className="mt-2 text-2xl font-black uppercase">Build your grade sheet</h2></div>
+                <span className="display-title text-4xl text-primary">01</span>
               </div>
-
-              <ModernCard className="p-0">
-                <ModernCardContent className="p-8 space-y-8">
-                  <div className="space-y-4">
-                    <Label htmlFor="subjects" className="text-lg font-semibold text-foreground block">
-                      Number of Subjects
-                    </Label>
-                    <Input
-                      id="subjects"
-                      type="number"
-                      min="1"
-                      max="13"
-                      placeholder=" 1-13"
-                      value={numSubjects}
-                      onChange={(e) => setNumSubjects(e.target.value)}
-                      className="text-center text-xl py-6 bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl"
-                    />
-                    <p className="text-sm  text-red-500">
-                      Enter a number between 1 and 13
-                    </p>
-                  </div>
-                  
-                  <ModernButton onClick={handleContinue} size="lg" className="w-full">
-                    Continue to Subject Details
-                  </ModernButton>
-                </ModernCardContent>
-              </ModernCard>
+              <label htmlFor="subjects" className="field-label">Number of subjects</label>
+              <Input id="subjects" type="number" min="1" max="13" placeholder="e.g. 6" value={numSubjects} onChange={(event) => setNumSubjects(event.target.value)} onKeyDown={(event) => event.key === "Enter" && handleContinue()} className="number-input text-2xl" />
+              <div className="mt-3 flex justify-between text-[11px] font-bold uppercase tracking-wider text-muted-foreground"><span>Minimum 01</span><span>Maximum 13</span></div>
+              <ModernButton size="lg" onClick={handleContinue} className="mt-9 w-full">Create grade sheet <ArrowRight /></ModernButton>
             </div>
           </div>
         </main>
@@ -170,109 +82,49 @@ const SGPACalculator = () => {
   }
 
   return (
-    <div className="min-h-screen bg-hero-gradient py-8 relative overflow-hidden">
-     
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-1/4 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
-        <div className="absolute bottom-1/4 -right-1/4 w-64 h-64 bg-accent/5 rounded-full blur-2xl" />
-      </div>
+    <div className="page-shell min-h-screen pb-20">
+      <SiteHeader onBack={() => setShowForm(false)} backLabel="Change subjects" />
+      <main className="site-container py-12 lg:py-16">
+        <div className="grid gap-10 lg:grid-cols-[1fr_340px] xl:grid-cols-[1fr_390px]">
+          <section>
+            <div className="mb-9">
+              <span className="eyebrow">Step 02 / 02</span>
+              <h1 className="display-title mt-5 text-5xl sm:text-7xl">Fill the grade sheet.</h1>
+              <p className="mt-4 font-semibold text-muted-foreground">Credits × grade points = your final SGPA.</p>
+            </div>
 
-     
-      <header className="relative px-8 mb-8">
-        <Button
-          variant="ghost"
-          onClick={() => setShowForm(false)}
-          className="text-foreground hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-xl"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
-        </Button>
-      </header>
+            <div className="border-2 border-foreground bg-card">
+              <div className="hidden grid-cols-[90px_1fr_1fr_80px] gap-5 border-b-2 border-foreground bg-foreground px-5 py-3 text-[10px] font-black uppercase tracking-[0.16em] text-background md:grid"><span>Subject</span><span>Credits</span><span>Marks / 100</span><span>Points</span></div>
+              {subjects.map((subject, index) => {
+                const marks = Number(subject.marks);
+                const points = subject.marks && marks >= 0 && marks <= 100 ? gradePoint(marks) : "—";
+                return (
+                  <div key={subject.id} className={`grid gap-4 p-5 md:grid-cols-[90px_1fr_1fr_80px] md:items-end ${index < subjects.length - 1 ? "border-b-2 border-foreground" : ""}`}>
+                    <div><span className="field-label md:hidden">Subject</span><span className="display-title text-3xl">{String(subject.id).padStart(2, "0")}</span></div>
+                    <div><label className="field-label md:hidden" htmlFor={`credits-${subject.id}`}>Credits</label><Input id={`credits-${subject.id}`} type="number" min="0.5" step="0.5" placeholder="4" value={subject.credits} onChange={(event) => updateSubject(subject.id, "credits", event.target.value)} className="number-input" /></div>
+                    <div><label className="field-label md:hidden" htmlFor={`marks-${subject.id}`}>Marks / 100</label><Input id={`marks-${subject.id}`} type="number" min="0" max="100" placeholder="84" value={subject.marks} onChange={(event) => updateSubject(subject.id, "marks", event.target.value)} className="number-input" /></div>
+                    <div className="flex items-center justify-between md:block"><span className="field-label md:hidden">Points</span><span className="grid h-14 w-14 place-items-center bg-secondary text-xl font-black md:w-full">{points}</span></div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[10px] font-black uppercase tracking-wider text-muted-foreground">
+              <span>90+ → 10</span><span>80+ → 9</span><span>70+ → 8</span><span>60+ → 7</span><span>50+ → 6</span><span>35+ → 5</span><span>&lt;35 → 0</span>
+            </div>
+          </section>
 
-      
-      <main className="relative container mx-auto px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-4">
-            Subject Details
-          </h1>
-          <p className="text-lg text-foreground/70 font-medium">
-            Enter credits and marks for each subject
-          </p>
-        </div>
-
-        <div className="max-w-5xl mx-auto space-y-6">
-          {subjects.map((subject) => (
-            <ModernCard key={subject.id} className="p-0">
-              <ModernCardContent className="p-6">
-                <div className="grid md:grid-cols-4 gap-6 items-center">
-                  <div className="text-center md:text-left">
-                    <div className="inline-flex items-center gap-3 bg-primary/10 rounded-xl px-4 py-2">
-                      <BookOpen className="w-5 h-5 text-primary" />
-                      <span className="text-lg font-bold text-primary">
-                        Subject {subject.id}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <Label className="text-foreground font-semibold">Credits</Label>
-                    <Input
-                      type="number"
-                      placeholder="e.g 4"
-                      value={subject.credits}
-                      onChange={(e) => updateSubject(subject.id, "credits", e.target.value)}
-                      className="bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl text-center font-medium"
-                    />
-                  </div>
-                  
-                  <div className="space-y-3 md:col-span-2">
-                    <Label className="text-foreground font-semibold">Marks (0-100)</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      max="100"
-                      placeholder="0-100"
-                      value={subject.marks}
-                      onChange={(e) => updateSubject(subject.id, "marks", e.target.value)}
-                      className="bg-input/50 border-border/50 focus:border-primary/50 backdrop-blur-sm rounded-xl text-center font-medium"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      90-100: A+(10pts) • 80-89: A(9pts) • 70-79: B+(8pts) • 60-69: B(7pts) • 50-59: C+(6pts) • 40-49: C(5pts) • Below 35: F(0pts)
-                    </p>
-                  </div>
-                </div>
-              </ModernCardContent>
-            </ModernCard>
-          ))}
-          
-          <div className="text-center space-y-8 mt-12">
-            <ModernButton onClick={calculateSGPA} size="xl" className="px-12">
-              Calculate My SGPA
-            </ModernButton>
-            
-            {sgpa !== null && (
-              <ModernCard className="p-0 max-w-md mx-auto bg-gradient-to-r from-primary/10 to-accent/10 border-primary/30">
-                <ModernCardContent className="p-8 text-center">
-                  <div className="mb-4">
-                    <Star className="w-12 h-12 text-primary mx-auto mb-3" />
-                    <h2 className="text-2xl font-bold text-foreground mb-2">
-                      Your SGPA is
-                    </h2>
-                  </div>
-                  <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-2">
-                    {sgpa}
-                  </div>
-                  <p className="text-muted-foreground font-medium">
-                    {sgpa >= 9 ? "Party!" : sgpa >= 7 ? "Good job !" : "Improve karo !"}
-                  </p>
-                </ModernCardContent>
-              </ModernCard>
-            )}
-          </div>
+          <aside className="lg:sticky lg:top-8 lg:self-start">
+            <div className={`${sgpa === null ? "bg-foreground text-background" : "bg-primary text-foreground"} border-2 border-foreground p-7 transition-colors`}>
+              <div className="flex items-start justify-between"><div><p className="text-[10px] font-black uppercase tracking-[0.18em] opacity-70">Calculated result</p><p className="mt-1 text-lg font-black uppercase">Your SGPA</p></div><Sparkles className="h-6 w-6" /></div>
+              <p className="display-title my-10 text-8xl">{sgpa ?? "—.—"}</p>
+              <p className="min-h-12 text-sm font-bold leading-relaxed opacity-75">{sgpa === null ? "Fill every row, then run the calculation." : sgpa >= 9 ? "Outstanding. That is a seriously strong semester." : sgpa >= 7 ? "Solid work. You are moving in the right direction." : "A baseline, not a verdict. Keep building."}</p>
+            </div>
+            <ModernButton size="lg" onClick={calculateSGPA} className="mt-5 w-full">Calculate SGPA <ArrowRight /></ModernButton>
+            <button onClick={() => { setSubjects(subjects.map((s) => ({ ...s, credits: "", marks: "" }))); setSGPA(null); }} className="mt-5 flex w-full items-center justify-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground"><RotateCcw className="h-3.5 w-3.5" /> Clear all values</button>
+          </aside>
         </div>
       </main>
     </div>
   );
 };
-
 export default SGPACalculator;
