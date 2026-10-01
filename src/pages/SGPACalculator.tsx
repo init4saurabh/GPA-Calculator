@@ -60,7 +60,7 @@ const SGPACalculator = () => {
         <main className="site-container grid min-h-[calc(100vh-80px)] items-center gap-12 py-14 lg:grid-cols-[1fr_.85fr]">
           <div>
             <span className="eyebrow"><BookOpen className="h-3.5 w-3.5" /> SGPA setup</span>
-            <h1 className="display-title mt-7 max-w-3xl text-6xl sm:text-8xl lg:text-9xl">Start with your subjects.</h1>
+            <h1 className="display-title mt-7 max-w-3xl text-[3.35rem] sm:text-8xl lg:text-9xl">Start with your subjects.</h1>
             <p className="mt-7 max-w-xl text-lg font-semibold leading-relaxed text-muted-foreground">Tell us how many subjects you took. We’ll build a clean grade sheet for the rest.</p>
           </div>
           <div className="relative">

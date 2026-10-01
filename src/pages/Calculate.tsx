@@ -16,7 +16,7 @@ const Calculate = () => {
         <div className="mb-12 grid items-end gap-6 lg:grid-cols-[1fr_auto]">
           <div>
             <span className="eyebrow">Choose your route</span>
-            <h1 className="display-title mt-6 max-w-4xl text-6xl sm:text-7xl lg:text-8xl">What are we calculating?</h1>
+            <h1 className="display-title mt-6 max-w-4xl text-[clamp(2.8rem,12vw,6rem)]">What are we calculating?</h1>
           </div>
           <p className="max-w-sm border-l-4 border-primary pl-5 font-semibold leading-relaxed text-muted-foreground lg:mb-2">Pick the number you need. The calculator handles the formula; you bring the grades.</p>
         </div>

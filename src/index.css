@@ -24,7 +24,7 @@
 
 @layer components {
   .page-shell {
-    @apply min-h-screen bg-background text-foreground;
+    @apply min-h-screen overflow-x-hidden bg-background text-foreground;
     background-image: linear-gradient(rgba(23, 21, 19, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(23, 21, 19, 0.035) 1px, transparent 1px);
     background-size: 32px 32px;
   }

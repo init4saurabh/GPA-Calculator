@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowDownRight, ArrowRight, Check, Sigma, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Check, Sigma, Sparkles, Zap } from "lucide-react";
 import { ModernButton } from "@/components/ui/modern-button";
 import SiteHeader from "@/components/SiteHeader";
 import BrandLogo from "@/components/BrandLogo";
+import HeroDashboard from "@/components/HeroDashboard";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -13,10 +14,10 @@ const Home = () => {
       <SiteHeader />
 
       <main>
-        <section className="site-container grid min-h-[calc(100vh-80px)] items-center gap-12 py-14 lg:grid-cols-[1.08fr_.92fr] lg:py-16">
+        <section className="site-container grid items-start gap-12 py-14 lg:min-h-[calc(100vh-80px)] lg:items-center lg:grid-cols-[minmax(0,1fr)_minmax(460px,.8fr)] xl:grid-cols-[minmax(0,1fr)_560px] lg:py-16">
           <div className="enter-up relative z-10">
             <div className="eyebrow mb-7"><Sparkles className="h-3.5 w-3.5" /> No sign-up. No spreadsheet.</div>
-            <h1 className="display-title max-w-[820px] text-[clamp(4.25rem,9.2vw,9.4rem)]">
+            <h1 className="display-title max-w-[820px] text-[clamp(3.1rem,13.4vw,6.5rem)]">
               Grades,
               <span className="relative block w-fit text-primary">
                 Minus The
@@ -38,34 +39,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-[590px] lg:ml-auto">
-            <div className="absolute -right-5 -top-5 h-32 w-32 bg-secondary md:-right-10 md:-top-9" />
-            <div className="absolute -bottom-7 -left-5 h-24 w-24 border-[14px] border-primary md:-left-10" />
-            <div className="hard-card enter-up relative rotate-[1.5deg] p-4 sm:p-6" style={{ animationDelay: "120ms" }}>
-              <div className="mb-8 flex items-center justify-between border-b-2 border-foreground pb-4">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground">Live preview</p>
-                  <p className="mt-1 text-lg font-black">Semester 04</p>
-                </div>
-                <span className="border-2 border-foreground bg-secondary px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em]">● Ready</span>
-              </div>
-
-              <div className="space-y-3">
-                {[{ name: "Data Structures", credit: 4, score: 9 }, { name: "DBMS", credit: 3, score: 8 }, { name: "Computer Networks", credit: 4, score: 9 }].map((subject, index) => (
-                  <div key={subject.name} className="grid grid-cols-[34px_1fr_auto] items-center gap-3 border-2 border-foreground bg-background p-3 sm:grid-cols-[42px_1fr_auto] sm:p-4">
-                    <span className="text-sm font-black text-muted-foreground">0{index + 1}</span>
-                    <div><p className="text-sm font-black sm:text-base">{subject.name}</p><p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{subject.credit} Credits</p></div>
-                    <span className="grid h-10 w-10 place-items-center bg-foreground text-lg font-black text-card">{subject.score}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-5 grid grid-cols-[1fr_auto] items-end gap-4 bg-primary p-5 text-foreground sm:p-6">
-                <div><p className="text-[10px] font-black uppercase tracking-[0.16em]">Your SGPA</p><p className="display-title mt-2 text-6xl sm:text-7xl">8.74</p></div>
-                <ArrowDownRight className="h-10 w-10" strokeWidth={2.5} />
-              </div>
-            </div>
-          </div>
+          <HeroDashboard />
         </section>
 
         <div className="overflow-hidden border-y-2 border-foreground bg-foreground py-3 text-background">

@@ -48,7 +48,7 @@ const CGPACalculator = () => {
         <main className="site-container grid min-h-[calc(100vh-80px)] items-center gap-12 py-14 lg:grid-cols-[1fr_.85fr]">
           <div>
             <span className="eyebrow"><Layers3 className="h-3.5 w-3.5" /> CGPA setup</span>
-            <h1 className="display-title mt-7 max-w-3xl text-6xl sm:text-8xl lg:text-9xl">Stack up your semesters.</h1>
+            <h1 className="display-title mt-7 max-w-3xl text-[3.35rem] sm:text-8xl lg:text-9xl">Stack up your semesters.</h1>
             <p className="mt-7 max-w-xl text-lg font-semibold leading-relaxed text-muted-foreground">Enter the number of completed semesters. We’ll turn every SGPA into one clean cumulative score.</p>
           </div>
           <div className="relative">
